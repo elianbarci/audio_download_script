@@ -38,7 +38,6 @@ for soup in soups:
     aux_description = 0
     
     for tag in tags:
-
         file1.write('http://bbcsfx.acropolis.org.uk' + tag.get('src')[2:] + "\n")
         print("Se comenzo a descargar el archivo: " + filename)
         r = requests.get('http://bbcsfx.acropolis.org.uk' + tag.get('src')[2:])
@@ -50,6 +49,7 @@ for soup in soups:
 
         file_upload = drive.CreateFile({"mimeType": "audio/*", "parents": [{"kind": "drive#fileLink", "id": fileID}]})
         file_upload.SetContentFile(filename)
+        
         try:
             file_upload.Upload()
         finally:
@@ -62,3 +62,5 @@ for soup in soups:
             except OSError:
                 print(" El archivo fue eliminado incorrectamente") 
                 pass
+
+        aux_description = aux_description + 1
