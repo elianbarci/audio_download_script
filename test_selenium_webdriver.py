@@ -34,7 +34,9 @@ filename = ""
 for soup in soups:
 
     tags =  soup('audio')
-
+    description = soup.findAll('td', {'tabindex': '0'})
+    aux_description = 0
+    
     for tag in tags:
 
         file1.write('http://bbcsfx.acropolis.org.uk' + tag.get('src')[2:] + "\n")
