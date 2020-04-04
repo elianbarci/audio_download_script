@@ -6,6 +6,15 @@ from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
 
+gauth = GoogleAuth()
+gauth.LocalWebserverAuth()
+drive = GoogleDrive(gauth)
+
+fileList = drive.ListFile({'q': "'root' in parents and trashed=false"}).GetList()
+for file in fileList:
+  if(file['title'] == "TestUpload"):
+      fileID = file['id']
+
 soups = []
 driver = webdriver.Chrome()
 driver.get('http://bbcsfx.acropolis.org.uk/')
@@ -25,14 +34,13 @@ filename = ""
 for soup in soups:
 
     tags =  soup('audio')
-    description = soup.findAll('td', {'tabindex': '0'})
-    aux_description = 0
-    
+
     for tag in tags:
-        file1.write('http://bbcsfx.acropolis.org.uk' + tag.get('src')[2:] + " " +  description[aux_description].getText() + "\n")
-        print("Se comenzo a descargar el archivo: " + description[aux_description].getText())
+
+        file1.write('http://bbcsfx.acropolis.org.uk' + tag.get('src')[2:] + "\n")
+        print("Se comenzo a descargar el archivo: " + filename)
         r = requests.get('http://bbcsfx.acropolis.org.uk' + tag.get('src')[2:])
-        filename = description[aux_description].getText()
+        filename = tag.get('src')[10:]
 
         with open(filename, 'wb') as f:
             f.write(r.content)
@@ -52,5 +60,3 @@ for soup in soups:
             except OSError:
                 print(" El archivo fue eliminado incorrectamente") 
                 pass
-
-        aux_description =  aux_description + 1
