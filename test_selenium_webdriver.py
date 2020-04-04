@@ -25,9 +25,14 @@ filename = ""
 for soup in soups:
 
     tags =  soup('audio')
+<<<<<<< Updated upstream
     description = soup.findAll('td', {'tabindex': '0'})
     aux_description = 0
     
+=======
+    
+
+>>>>>>> Stashed changes
     for tag in tags:
         file1.write('http://bbcsfx.acropolis.org.uk' + tag.get('src')[2:] + " " +  description[aux_description].getText() + "\n")
         print("Se comenzo a descargar el archivo: " + description[aux_description].getText())
