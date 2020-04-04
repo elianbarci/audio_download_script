@@ -2,7 +2,18 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 import time
 import requests
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+import os
 
+gauth = GoogleAuth()
+gauth.LocalWebserverAuth()
+drive = GoogleDrive(gauth)
+
+fileList = drive.ListFile({'q': "'root' in parents and trashed=false"}).GetList()
+for file in fileList:
+  if(file['title'] == "TestUpload"):
+      fileID = file['id']
 
 soups = []
 driver = webdriver.Chrome()
@@ -10,27 +21,42 @@ driver.get('http://bbcsfx.acropolis.org.uk/')
 page = 0
 time.sleep(5)
 
-while page < 2:
+while page < 1:
     soups.append(BeautifulSoup(driver.page_source))
     page = page + 1
     driver.get('http://bbcsfx.acropolis.org.uk/?page=' + str(page))
     time.sleep(5)
 
 driver.quit
-#links = []
 file1 = open("wav_links.txt","w")
+filename = ""
 
 for soup in soups:
+
     tags =  soup('audio')
+
     for tag in tags:
-        #links.append('http://bbcsfx.acropolis.org.uk' + tag.get('src')[2:] + "\n")#Slice syntax give me the part of this sequence which begins at index 2 and continues to the end (since no end point was specified after the colon)
+
         file1.write('http://bbcsfx.acropolis.org.uk' + tag.get('src')[2:] + "\n")
+        print("Se comenzo a descargar el archivo: " + filename)
         r = requests.get('http://bbcsfx.acropolis.org.uk' + tag.get('src')[2:])
-        with open(tag.get('src')[10:], 'wb') as f:
+        filename = tag.get('src')[10:]
+
+        with open(filename, 'wb') as f:
             f.write(r.content)
-            f.close()
+            print("Se descargo correctamente el archivo: " + filename)
 
-
-file1.close()
-
-
+        file_upload = drive.CreateFile({"mimeType": "audio/*", "parents": [{"kind": "drive#fileLink", "id": fileID}]})
+        file_upload.SetContentFile(filename)
+        try:
+            file_upload.Upload()
+        finally:
+            file_upload.content.close()
+        if file_upload.uploaded: 
+            print("Se subio correctamente el archivo: " + filename)
+            try:
+                os.remove(filename)
+                print(" El archivo fue eliminado correctamente") 
+            except OSError:
+                print(" El archivo fue eliminado incorrectamente") 
+                pass
