@@ -38,10 +38,10 @@ for soup in soups:
     aux_description = 0
     
     for tag in tags:
+        filename = description[aux_description].getText()
         file1.write('http://bbcsfx.acropolis.org.uk' + tag.get('src')[2:] + "\n")
         print("Se comenzo a descargar el archivo: " + filename)
         r = requests.get('http://bbcsfx.acropolis.org.uk' + tag.get('src')[2:])
-        filename = tag.get('src')[10:]
 
         with open(filename, 'wb') as f:
             f.write(r.content)
@@ -54,6 +54,7 @@ for soup in soups:
             file_upload.Upload()
         finally:
             file_upload.content.close()
+
         if file_upload.uploaded: 
             print("Se subio correctamente el archivo: " + filename)
             try:
@@ -62,5 +63,5 @@ for soup in soups:
             except OSError:
                 print(" El archivo fue eliminado incorrectamente") 
                 pass
-
+            
         aux_description = aux_description + 1
