@@ -1,10 +1,6 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
-import time
-import requests
-import os
-import re
-import support_functions
+import time, requests, os, re, support_functions
 
 drive = support_functions.getGoogleDriveInstance()
 fileID = support_functions.stablishGoogleDriveFolder(drive, "TestUpload")
@@ -12,7 +8,7 @@ fileID = support_functions.stablishGoogleDriveFolder(drive, "TestUpload")
 soups = []
 driver = webdriver.Chrome()
 driver.get('http://bbcsfx.acropolis.org.uk/')
-page = 0
+page = 1
 time.sleep(5)
 
 while page < 621:
@@ -22,7 +18,7 @@ while page < 621:
     time.sleep(5)
 
 driver.quit
-file1 = open("wav_links.txt", "w")
+file1 = open("wav_links.txt", "r+")
 filename = ""
 
 for soup in soups:
