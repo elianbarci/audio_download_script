@@ -1,7 +1,9 @@
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
+import time
 
 folderID = ""
+FileList = []
 
 def getGoogleDriveInstance():
     gauth = GoogleAuth()
@@ -16,14 +18,36 @@ def stablishGoogleDriveFolder(drive, name_of_folder):
             folderID = file['id']
             return folderID
 
-def checkElementsIfElementIsAlreadyLoaded(drive, name_of_file):  
-    global folderID 
-    query = "'" + folderID + "' in parents and trashed=false"
-    fileList = drive.ListFile({'q': query}).GetList()
+def checkElementsIfElementIsAlreadyLoaded(name_of_file, fileList):
+
+    global FileList
+    returntype = True
+
     if(len(fileList)==0):
-        return True
-    for fileaux in fileList:
-        if(fileaux['title'] == name_of_file):
-            print("El elemento " + fileaux['title'] + " ya estaba en la carpeta de Google Drive")
-            return False
-    return True
+        FileList = fileList
+        return returntype
+
+    else:
+
+        if(len(FileList) != 0):
+            fileList = FileList
+
+        for fileaux in fileList:
+            if(fileaux['title'] == name_of_file):
+                fileList.remove(fileaux)
+                returntype = False
+                FileList = fileList
+                return returntype
+            else:
+                pass
+    
+    return returntype
+
+def getFileList(fileID, drive):
+    query = "'" + fileID + "' in parents and trashed=false"
+    fileList = drive.ListFile({'q': query}).GetList()
+    return fileList
+
+def getNewFileList():
+    global FileList
+    return FileList
