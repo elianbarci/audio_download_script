@@ -8,6 +8,8 @@ Remember to use the sounds under the terms of the RemArc Licence.
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the dependencies indicated in the ```requirements.txt``` file.
 
+The next thing that you have to do to get all ready it's [follow the next link](https://developers.google.com/drive/api/v3/quickstart/python) and download the ```client_secrets.json``` file. The path of the file is outside the bbc_audio_download folder.
+
 ## Usage
 
 ```python
