@@ -3,27 +3,3 @@
 This is a simple script that allow you to download and upload the .wav files of the public library of BBC Sound Effects: bbcsfx.acropolis.org.uk
 
 Remember to use the sounds under the terms of the RemArc Licence.
-
-## Installation
-
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the dependencies indicated in the ```requirements.txt``` file.
-
-The next thing that you have to do to get all ready it's [follow the next link](https://developers.google.com/drive/api/v3/quickstart/python) and download the ```client_secrets.json``` file. The path of the file is outside the bbc_audio_download folder.
-
-## Usage
-
-```python
-import foobar
-
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
-```
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
